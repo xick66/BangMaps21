@@ -24,13 +24,13 @@ export default function Home({ runQuery }: HomeProps) {
 
   return (
     <section className="home flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900">
-      <img alt="Logo" className="h-16 mb-4" src="/logo.svg" />
+      <img alt="Logo" className="h-16 mb-4" src="/BangMapsLogo.png" />
       <div className="w-full max-w-md p-4 bg-white shadow-md rounded-md dark:bg-gray-800">
         <div className="flex flex-col items-center space-y-4">
           <div className="flex items-center space-x-2 w-full">
             <Input
               className="w-full border-none focus:ring-0 dark:bg-gray-800 dark:text-gray-200"
-              placeholder="What can we help you accomplish..."
+              placeholder="How can we help yoy?"
               type="text"
               onKeyPress={(event) => {
                 if (event.key === 'Enter') {
