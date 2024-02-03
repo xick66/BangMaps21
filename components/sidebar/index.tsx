@@ -40,24 +40,24 @@ export default function Sidebar({ messages, children, ShowMessage, onSubmitFormC
         <div className="flex h-screen">
         <div className="w-1/4 border-r">
           <div className="p-4">
-            <h2 className="text-lg font-semibold">Chat</h2>
+            <h2 className="text-2xl bg-yellow-500 p-2 text-center rounded-sm font-bold">BangMaps</h2>
             <div className="p-2 flex flex-col items-start space-y-2">
   <label className="flex items-center space-x-2">
   <FaMapMarkerAlt size={24} className="text-blue-500 w-4 h-4" />
    <span className="text-gray-700">Drainage Areas</span>
   </label>
   <label className="flex items-center space-x-2">
-  <FaMapMarkerAlt className="text-green-500 w-4 h-4" />
+  <FaMapMarkerAlt className="text-purple-500 w-4 h-4" />
     <span className="text-gray-700">Flooding Vulnerable</span>
   </label>
   <label className="flex items-center space-x-2">
-  <FaMapMarkerAlt className="text-red-500 w-4 h-4" />
+  <FaMapMarkerAlt className="text-yellow-500 w-4 h-4" />
   <span className="text-gray-700">Drought</span>
   </label>
 </div>
             <div className="mt-4 space-y-2">
                 { messages.map((message, index) => {
-                    return <div className="p-2 rounded-md bg-gray-100 dark:bg-gray-800">
+                    return <div className="p-2 rounded-md bg-gray-100 dark:bg-yellow-200">
                     <div className="text-sm text-gray-500 dark:text-gray-400">
                       {/* <strong>{message.role}:</strong> */}
                       {/* {message.content} */}

@@ -420,7 +420,7 @@ function DynamicComponent({ functionCall: functionCallRaw, onSubmit }: any) {
             // const position = args?.center ? [args?.center?.lat, args?.center?.lon] : [51.505, -0.09]
             // const centerPosition = args?.center ? locationToPoint(args?.center) : [51.505, -0.09]
             const centerPosition = args?.center ? locationToPoint(args?.center) : null
-            const zoomLevel = args?.zoomLevel ?? 13;
+            const zoomLevel = args?.zoomLevel ?? 19;
             //     const markers = [
             //         {
             //         label: 'First location',

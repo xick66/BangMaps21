@@ -83,7 +83,7 @@ const KMLLayer = ({ kmlFile, iconUrl }) => {
 };
 
   
-export default function Map({center, markers,kmlFiles=[],iconMapping,zoomLevel = 13 }: MapProps) {
+export default function Map({center, markers,kmlFiles=[],iconMapping,zoomLevel = 17 }: MapProps) {
 const mapRef=useRef()
     return <div>
         <MapContainer center={center} zoom={zoomLevel} style={{ height: '100vh' }}

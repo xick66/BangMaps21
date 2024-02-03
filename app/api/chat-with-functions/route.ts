@@ -52,7 +52,7 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
 
   const response = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo-0613',
+    model: 'gpt-3.5-turbo-0125',
     stream: true,
     messages,
     functions,
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
         return openai.chat.completions.create({
           messages: [...messages, ...newMessages],
           stream: true,
-          model: 'gpt-3.5-turbo-0613',
+          model: 'gpt-3.5-turbo-0125',
         });
       }
     },
