@@ -18,17 +18,20 @@ const kmlFileUrls = [
     '/kml/waterdepth.kml',
     "/kml/flood.kml",
     "/kml/kaaqms.kml",
-    "/kml/bwssbwaterline.kml",
     "/kml/cctv.kml",
     "/kml/firestations.kml",
     "/kml/slums.kml",
-    "/kml/metrostations.kml"
+    // "/kml/metrostations.kml"
      // Assuming you have example2.kml in the public/kml directory
     // Add more KML file URLs as needed
   ];
   const iconMapping = {
     'waterdepth': '/icons/yellow.png',
     'flood': '/icons/red.png',
+    'kaaqms': '/icons/airquality.svg',
+    'cctv': '/icons/cctv.svg',
+    'firestations': '/icons/firetruck.svg'
+
   };
   const Form = dynamic(() => import('../components/form'), { ssr: false });
 
