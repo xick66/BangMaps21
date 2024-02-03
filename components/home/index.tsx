@@ -30,7 +30,7 @@ export default function Home({ runQuery }: HomeProps) {
           <div className="flex items-center space-x-2 w-full">
             <Input
               className="w-full border-none focus:ring-0 dark:bg-gray-800 dark:text-gray-200"
-              placeholder="How can we help yoy?"
+              placeholder="How can we help you?"
               type="text"
               onKeyPress={(event) => {
                 if (event.key === 'Enter') {

@@ -164,26 +164,7 @@ export interface MapProps {
     kmlFiles:string[];
     iconMapping: { [key: string]: string }; 
 }
-const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const earthRadius = 6371; // Radius of the Earth in kilometers
-    const lat1Rad = (lat1 * Math.PI) / 180;
-    const lon1Rad = (lon1 * Math.PI) / 180;
-    const lat2Rad = (lat2 * Math.PI) / 180;
-    const lon2Rad = (lon2 * Math.PI) / 180;
 
-    const dLat = lat2Rad - lat1Rad;
-    const dLon = lon2Rad - lon1Rad;
-
-    const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(dLon / 2) ** 2;
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    const distance = earthRadius * c; 
-    console.log("pppp",distance)
-    return distance;
-};
 
 const KMLLayer = ({ kmlFile, iconUrl, circleCenter, circleRadius }) => {
     const map = useMap();
@@ -194,20 +175,18 @@ const KMLLayer = ({ kmlFile, iconUrl, circleCenter, circleRadius }) => {
                 const newData: DataPoint[] = [];
                   kmlLayer.eachLayer((layer) => {
                     const featureType = layer.feature.geometry.type;
-                    const properties = layer.feature.properties;
                     if (featureType === 'Point' && iconUrl) {
-                        const { lat, lng } = layer.getLatLng();
-                        const distance = calculateDistance(lat, lng, circleCenter[0], circleCenter[1]);
-                        console.log(circleCenter[0],circleCenter[1]);
+                        // const { lat, lng } = layer.getLatLng();
+                        // const distance = calculateDistance(lat, lng, circleCenter[0], circleCenter[1]);
+                        // console.log(circleCenter[0],circleCenter[1]);
                         const icon = new Icon({ iconUrl, iconSize: [24, 32] });
                         layer.setIcon(icon);
-                        if (distance <= 1) {
-                            newData.push({ lat, lng, ...properties });                        }
+                        // if (distance <= 1) {
+                        //     newData.push({ lat, lng, ...properties });                        }
                     }
                 });
-                setExtractedData((prevData) => [...prevData, ...newData]);
+                // setExtractedData((prevData) => [...prevData, ...newData]);
                 map.fitBounds(kmlLayer.getBounds());
-                console.log("Pramath", extractedData);
             })
             .addTo(map);
 
@@ -222,7 +201,33 @@ const KMLLayer = ({ kmlFile, iconUrl, circleCenter, circleRadius }) => {
   
 export default function Map({center, markers,kmlFiles=[],iconMapping,zoomLevel = 17 }: MapProps) {
 const mapRef=useRef()
+const [circleData, setCircleData] = useState([]); 
+    const [kmlData, setKmlData] = useState([]);
 const circleRadius = 1000;
+const fetchKmlData = async () => {
+    const response = await fetch('/riskanalysis/route', { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            circles: markers.map(marker => ({ 
+                radius: circleRadius,
+            })),
+        }),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        setKmlData(data.pointsInCircles); // Update state with the received KML data
+    } else {
+        // Handle errors
+        console.error('Failed to fetch KML data');
+    }
+};
+useEffect(() => {
+    fetchKmlData();
+}, [markers]);
     return <div>
         <MapContainer center={center} zoom={zoomLevel} style={{ height: '100vh' }}
         ref={mapRef}
