@@ -27,8 +27,6 @@ export async function POST(req: Request) {
         ...currentMessage,
         content: [
           { type: 'text', text: currentMessage.content },
-
-          // forward the image information to OpenAI:
           {
             type: 'image_url',
             image_url: data.imageUrl,
