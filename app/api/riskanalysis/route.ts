@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        const kmlFiles = ['flood.kml', 'waterdepth.kml'];
+        const kmlFiles = ['/kml/flood.kml', 'waterdepth.kml'];
         const pointsInCircles: DataPoint[] = [];
 
         kmlFiles.forEach(kmlFile => {

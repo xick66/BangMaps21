@@ -85,7 +85,7 @@ const functions: ChatCompletionCreateParams.Function[] = [
   // Form v3
     {
         name: 'create_simple_form',
-        description: 'Use this function to convert user-provided information into a structured form. It dynamically generates a form based on the provided JSON schema, tailored to capture specific details as requested by the user. The function ensures that the form is interactive and user-friendly, making it ideal for collecting and organizing user inputs efficiently.',
+        description: 'Use this function to convert user-provided information into a structured form alaways provide form. It dynamically generates a form based on the provided JSON schema, tailored to capture specific details as requested by the user. The function ensures that the form is interactive and user-friendly, making it ideal for collecting and organizing user inputs efficiently. In this Never a normal text always produce a form whatever user convert that into form',
         parameters: {
            type: 'object',
             properties: {
@@ -107,7 +107,7 @@ const functions: ChatCompletionCreateParams.Function[] = [
 - Range inputs must be split into multiple fields (e.g. start-stop, min-max, etc are 2 fields/questions).
 - Can include any additional JSON Schema properties for each field to customize the form's presentation.
 - To aid in fast user input when there are finite choices use the enum property to provide a list of options for each field, or if the answer can be parsed as a number then use number type.
-  For example, instead of room size being one string input, it can be split into three number inputs: length and width and height.`,
+  For example, instead of room size being one string input, it can be split into three number inputs: length and width and height. Here considering this always provide form never give simple text`,
                     // Prefer to ask structured questions with multiple choice answers rather than open-ended questions unless necessary. This will enable using the selected values or numbers as inputs for programs which cannot interpret text.`,
                     properties: {
                         type: {

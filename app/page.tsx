@@ -1,7 +1,7 @@
 'use client';
 
 // import { Form } from '@/components/form';
-import { useRef } from 'react';
+import {useEffect, useRef } from 'react';
 import { FunctionCallHandler, nanoid } from 'ai';
 import { Message, useChat } from 'ai/react';
 import { OpenAiHandler } from "openai-partial-stream";
@@ -251,6 +251,7 @@ function ShowMessage({ message: m, onSubmitFormComponent }: { message: Message, 
 }
 
 function DynamicComponent({ functionCall: functionCallRaw, onSubmit }: any) {
+    const [kmlResponse, setKmlResponse] = useState(null);
     const prevState = useRef<any>({});
     if (!functionCallRaw) {
         return null;
@@ -322,6 +323,44 @@ function DynamicComponent({ functionCall: functionCallRaw, onSubmit }: any) {
         }
 
         const { startPosition, markers, zoomLevel } = prevState.current;
+        console.log("sss",startPosition);
+        console.log("mmm",markers)
+        console.log("zzzz",zoomLevel)
+      
+
+        const callApi = async (startPosition) => {
+            try {
+                const response = await fetch('/api/riskanalysis', { // Adjust the API endpoint as necessary
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        circles: startPosition.map((pos) => ({
+                            center: pos.position,
+                            radius: 1000, // Set the radius as per your requirement
+                        })),
+                    }),
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    setKmlResponse(data); // Update state with the received KML data
+                } else {
+                    // Handle errors
+                    console.error('Failed to fetch KML data');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+    
+        useEffect(() => {
+            if (prevState.current.startPosition) {
+                callApi(prevState.current.startPosition);
+            }
+        }, [prevState.current.startPosition]);
+        console.log("hehehh",kmlResponse)
         return <div style={{ 'height': '100vh' }}>
             <ErrorBoundary fallbackRender={fallbackRender} resetKeys={[JSON.stringify(startPosition), JSON.stringify(markers)]}>
                 {startPosition && (
