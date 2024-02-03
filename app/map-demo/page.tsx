@@ -4,7 +4,16 @@ import type { MapProps } from '../../components/map/map';
 const Map = dynamic(() => import('../../components/map/map'), {
         ssr: false,
 });
-
+const kmlFileUrls = [
+    '/kml/drains.kml', // Assuming you have example1.kml in the public/kml directory
+    '/kml/waterdepth.kml',
+    "/kml/flood.kml" // Assuming you have example2.kml in the public/kml directory
+    // Add more KML file URLs as needed
+  ];
+  const iconMapping = {
+    'waterdepth': '/icons/yellow.png',
+    'flood': '/icons/red.png',
+  };
 export default function Page() {
     const position: [number, number] = [51.505, -0.09]
     const markers: MapProps['markers'] = [{
@@ -19,7 +28,7 @@ export default function Page() {
 
     return <div style={{'height': 600}}>
         <h1>Map Demo</h1>
-        <Map key={JSON.stringify({ position, markers })} center={position} markers={markers}/>
+        <Map key={JSON.stringify({ position, markers })} center={position} markers={markers} kmlFiles={kmlFileUrls} iconMapping={iconMapping} />
     </div>;
 }
 
