@@ -14,9 +14,16 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { parseStreamingFunctionCall, parseStreamingJsonString } from '../lib/parseStreamingJson';
 const kmlFileUrls = [
-    '/kml/drains.kml', // Assuming you have example1.kml in the public/kml directory
+    '/kml/stormwaterdrains.kml', // Assuming you have example1.kml in the public/kml directory
     '/kml/waterdepth.kml',
-    "/kml/flood.kml" // Assuming you have example2.kml in the public/kml directory
+    "/kml/flood.kml",
+    "/kml/kaaqms.kml",
+    "/kml/bwssbwaterline.kml",
+    "/kml/cctv.kml",
+    "/kml/firestations.kml",
+    "/kml/slums.kml",
+    "/kml/metrostations.kml"
+     // Assuming you have example2.kml in the public/kml directory
     // Add more KML file URLs as needed
   ];
   const iconMapping = {
@@ -111,45 +118,6 @@ export default function Chat() {
             window.localStorage.removeItem('OPENAI_API_KEY');
         },
         experimental_onFunctionCall: functionCallHandler,
-//         initialMessages: [
-//             {
-//                 id: nanoid(),
-//                 role: 'system',
-//                 content: `
-// You are an intelligent assistant specializing in understanding user needs and intentions for the purpose of dynamically constructing a context-dependent UI using available components.
-
-// When you receive a user's input, your first task is to decipher the user's intention. Consider the context, the specifics of the request, and any underlying needs or goals. If the request is ambiguous or lacks detail, ask targeted follow-up questions to gather the necessary information. Your aim is to develop a clear and comprehensive understanding of what the user wants to achieve, such that you can invoke the following tools to display to the user:
-
-// Available tools:
-// - Interactive Map: Essential for travel planning, event locations, and potentially home automation control.
-// - 3D Rendering Engine: For interior design, home automation visualization, and potentially for event space planning.
-// - Customizable Forms/Input Components: To present to a user to ask them follow up questions that clarify their intent.
-
-// Instructions: 
-// - If you need further context from the user to understand their intention sufficient enough to generate a good UI, respond with 3-5 follow-up questions or statements to clarify the user's intention. Focus on understanding the specific requirements, preferences, or constraints related to their request.
-// - If you have only 1 follow-up question then use chat, otherwise always prefer to use a form.
-// `
-//                 //                 content: `
-//                 // Now you are an advanced interface designer, capable of creating structured UI schemas based on the available user requirements.
-
-//                 // Now that you have analyzed the user's intentions, your next step is to design an interactive, user-friendly form that captures all necessary follow up information to address their request. Use the insights gathered from these follow-up questions to construct a YAML schema and corresponding UI schema that will guide the user through providing detailed and specific information.
-
-//                 // Instructions:
-//                 // - Only return correctly formatted JSON output which satisfies the AskUserQuestions type and no comments. Then, create a UI schema focusing on user-friendly interaction methods
-//                 // - Communicate using only the TypeScript types RJSFSchema, UiSchema
-//                 // - Must always use block scalar indicator style in YAML
-//                 // - Make sure you always add help text to input fields
-//                 // - For each form field, start with a sensible default
-//                 // Bonus:
-//                 // - After gathering all the user input, summarize the user's intent in a concise statement, which will inform the choice and configuration of the UI tools that will be invoked using the JSON output from this step.
-//                 // `
-//             },
-//             // {
-//             //     id: nanoid(),
-//             //     role: 'assistant',
-//             //     function_call: `{"function_call": {"name": "create_simple_form", "arguments": "{\n  \"id\": \"trip_planning_form\",\n  \"jsonSchema\": \"{\\\"title\\\":\\\"Lake Tahoe Trip Planning\\\",\\\"type\\\":\\\"object\\\",\\\"properties\\\":{\\\"dates\\\":{\\\"type\\\":\\\"string\\\",\\\"title\\\":\\\"What are the intended dates for your trip?\\\",\\\"format\\\":\\\"date\\\"},\\\"transportation\\\":{\\\"type\\\":\\\"string\\\",\\\"title\\\":\\\"How do you plan to get to Lake Tahoe?\\\",\\\"enum\\\":[\\\"Car\\\",\\\"Bus\\\",\\\"Train\\\",\\\"Plane\\\",\\\"Other\\\"]},\\\"accommodation\\\":{\\\"type\\\":\\\"string\\\",\\\"title\\\":\\\"What type of accommodation are you looking for?\\\",\\\"enum\\\":[\\\"Hotel\\\",\\\"Motel\\\",\\\"Cabin\\\",\\\"Resort\\\",\\\"Airbnb\\\"]},\\\"activities\\\":{\\\"type\\\":\\\"string\\\",\\\"title\\\":\\\"What activities are you interested in at Lake Tahoe?\\\",\\\"description\\\":\\\"e.g., skiing, hiking, boating\\\"},\\\"budget\\\":{\\\"type\\\":\\\"string\\\",\\\"title\\\":\\\"What is your budget for the trip per person?\\\"},\\\"preferences\\\":{\\\"type\\\":\\\"string\\\",\\\"title\\\":\\\"Do you have any specific preferences or needs for this trip`,
-//             // }
-//         ]
     });
 
     const submitFirstQuery: HomeProps['runQuery'] = ({ query, apiKey }) => {
@@ -195,7 +163,7 @@ export default function Chat() {
     return (
         <>
             <Head>
-                <title>Alvea - UI Demo</title>
+                <title>BangMaps</title>
             </Head>
             <div className={`mode-${mode}`}>
                 {mode === 'home' && (

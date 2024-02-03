@@ -22,7 +22,7 @@ export default function Chat() {
           handleSubmit(e, {
             data: {
               imageUrl:
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Field_sparrow_in_CP_%2841484%29_%28cropped%29.jpg/733px-Field_sparrow_in_CP_%2841484%29_%28cropped%29.jpg',
+                'https://i.postimg.cc/SQMtWgz5/Screenshot-2024-02-02-at-2-11-45-AM.png',
             },
           });
         }}
