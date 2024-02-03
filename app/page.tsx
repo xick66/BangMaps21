@@ -14,9 +14,16 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { parseStreamingFunctionCall, parseStreamingJsonString } from '../lib/parseStreamingJson';
 const kmlFileUrls = [
-    '/kml/drains.kml', // Assuming you have example1.kml in the public/kml directory
+    '/kml/stormwaterdrains.kml', // Assuming you have example1.kml in the public/kml directory
     '/kml/waterdepth.kml',
-    "/kml/flood.kml" // Assuming you have example2.kml in the public/kml directory
+    "/kml/flood.kml",
+    "/kml/kaaqms.kml",
+    "/kml/bwssbwaterline.kml",
+    "/kml/cctv.kml",
+    "/kml/firestations.kml",
+    "/kml/slums.kml",
+    "/kml/metrostations.kml"
+     // Assuming you have example2.kml in the public/kml directory
     // Add more KML file URLs as needed
   ];
   const iconMapping = {
@@ -143,7 +150,7 @@ export default function Chat() {
     return (
         <>
             <Head>
-                <title>Alvea - UI Demo</title>
+                <title>BangMaps</title>
             </Head>
             <div className={`mode-${mode}`}>
                 {mode === 'home' && (

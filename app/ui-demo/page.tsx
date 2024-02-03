@@ -36,7 +36,7 @@ export default function Component() {
     return (
         <>
         <Head>
-            <title>Alvea - UI Demo</title>
+            <title>BangMaps</title>
         </Head>
         <div className={`mode-${mode}`}>
             {mode === 'home' && (
