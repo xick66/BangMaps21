@@ -13,7 +13,17 @@ import Sidebar from '@/components/sidebar';
 import Head from 'next/head';
 import { useState } from 'react';
 import { parseStreamingFunctionCall, parseStreamingJsonString } from '../lib/parseStreamingJson';
-
+const kmlFileUrls = [
+    '/kml/drains.kml', // Assuming you have example1.kml in the public/kml directory
+    '/kml/waterdepth.kml',
+    "/kml/flood.kml" // Assuming you have example2.kml in the public/kml directory
+    // Add more KML file URLs as needed
+  ];
+  const iconMapping = {
+    'waterdepth': '/icons/yellow.png',
+    'flood': '/icons/red.png',
+  };
+  
 // const Form = dynamic(() => import('@/components/form'), { ssr: false });
 const Form = dynamic(() => import('../components/form'), { ssr: false });
 
@@ -458,7 +468,7 @@ function DynamicComponent({ functionCall: functionCallRaw, onSubmit }: any) {
             {/* <pre>{JSON.stringify(prevState.current, null, 2)}</pre> */}
             <ErrorBoundary fallbackRender={fallbackRender} resetKeys={[JSON.stringify(startPosition), JSON.stringify(markers)]}>
                 {startPosition && (
-                    <Map center={startPosition} markers={markers} zoomLevel={zoomLevel} />
+                    <Map center={startPosition} markers={markers} zoomLevel={zoomLevel} kmlFiles={kmlFileUrls} iconMapping={iconMapping} />
                 )}
             </ErrorBoundary>
         </div>;

@@ -83,7 +83,7 @@ function getApiKey(): string {
   if (apiKey) {
       return apiKey;
   }
-  const newApiKey = prompt(`Enter your OpenAI API key from https://platform.openai.com/account/api-keys`, 'sk-<your');
+  const newApiKey = prompt(`Enter your OpenAI API key from https://platform.openai.com/account/api-keys`, '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');
   if (newApiKey) {
       window.localStorage.setItem('OPENAI_API_KEY', newApiKey);
       return newApiKey;

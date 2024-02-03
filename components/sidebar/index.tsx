@@ -1,6 +1,6 @@
 import { Message } from 'ai';
 import dynamic from 'next/dynamic';
-
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 const Map = dynamic(() => import('../../components/map/map'), {
         ssr: false,
@@ -41,6 +41,20 @@ export default function Sidebar({ messages, children, ShowMessage, onSubmitFormC
         <div className="w-1/4 border-r">
           <div className="p-4">
             <h2 className="text-lg font-semibold">Chat</h2>
+            <div className="p-2 flex flex-col items-start space-y-2">
+  <label className="flex items-center space-x-2">
+  <FaMapMarkerAlt size={24} className="text-blue-500 w-4 h-4" />
+    <input name="drainage" className="form-checkbox h-5 w-5 text-blue-600" /><span className="text-gray-700">Drainage Areas</span>
+  </label>
+  <label className="flex items-center space-x-2">
+  <FaMapMarkerAlt className="text-green-500 w-4 h-4" />
+    <input name="flooding" className="form-checkbox h-5 w-5 text-red-600" /><span className="text-gray-700">Flooding Vulnerable</span>
+  </label>
+  <label className="flex items-center space-x-2">
+  <FaMapMarkerAlt className="text-red-500 w-4 h-4" />
+    <input name="drought" className="form-checkbox h-5 w-5 text-yellow-500" /><span className="text-gray-700">Drought</span>
+  </label>
+</div>
             <div className="mt-4 space-y-2">
                 { messages.map((message, index) => {
                     return <div className="p-2 rounded-md bg-gray-100 dark:bg-gray-800">
