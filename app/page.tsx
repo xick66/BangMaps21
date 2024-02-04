@@ -131,7 +131,7 @@ export default function Chat() {
         const formEntries = Object.entries(formValues.formData).map(([key, value]) => `${key}: ${value}`);
         const formDetails = formEntries.join(', ');
     console.log(formDetails)
-        const newPrompt = `I am an insurance provider, these are the parameters of the user's building: ${formDetails}. Give me the risk analysis report for the building in a json like table header and data for formdata which I provided, and conclude the verdict. Make three columns: criteria, details, and remarks, keep the report precise and data oriented, give reasons for the verdict.`;
+        const newPrompt = `I am an insurance provider, these are the parameters of the user's building: ${formDetails}. Give me the risk analysis report for the building in a json like table header and data for formdata which I provided, and conclude the verdict. Make three columns: criteria, details, and remarks, keep the report precise and data oriented, give reasons for the verdict, keep it brief and packed with heavy data, assume data wherever needed, add some numerical data too.`;
     
         const response = await fetch('/api/risktable', { // Assuming '/api/route' is your API endpoint in route.ts
             method: 'POST',
