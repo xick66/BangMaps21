@@ -179,7 +179,7 @@ export default function Chat() {
                 {mode === 'tools' && (
                     <div className={"tools"}>
                         <Sidebar messages={chatMessages} onSubmitFormComponent={onSubmitFormComponent} ShowMessage={ShowMessage}>
-                            {bigMessage && <ShowMessage message={bigMessage} onSubmitFormComponent={onSubmitFormComponent} />}
+                            {bigMessage && <ShowMessage message={bigMessage} onSubmitFormComponent={onSubmitFormComponent} modelResponse={modelResponse} />}
                         </Sidebar>
                     </div>
                 )}
@@ -240,7 +240,7 @@ export default function Chat() {
     );
 }
 
-function ShowMessage({ message: m, onSubmitFormComponent }: { message: Message, onSubmitFormComponent: any }) {
+function ShowMessage({ message: m, onSubmitFormComponent, modelResponse }: { message: Message, onSubmitFormComponent: any, modelResponse: any }) {
     const isFunctionCallDone = typeof m.function_call === 'object';
     return (
         <div

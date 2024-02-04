@@ -15,7 +15,7 @@ export async function POST(req: Request,res:Response) {
             messages: [{ role: 'system', content: newPrompt }],
         });
 console.log(newPrompt)
-console.log(JSON.stringify(completion.choices[0]))
+console.log("common",JSON.stringify(completion.choices[0]))
         return new Response(JSON.stringify(completion.choices[0]), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
