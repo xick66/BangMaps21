@@ -29,8 +29,8 @@ const kmlFileUrls = [
     'waterdepth': '/icons/yellow.png',
     'flood': '/icons/red.png',
     'kaaqms': '/icons/airquality.svg',
-    'cctv': '/icons/cctv.svg',
-    'firestations': '/icons/firetruck.svg'
+    'cctv': '/icons/cctv-camera.png',
+    'firestations': '/icons/firestation.png'
 
   };
   const Form = dynamic(() => import('../components/form'), { ssr: false });
@@ -62,6 +62,7 @@ export default function Chat() {
         chatMessages,
         functionCall,
     ) => {
+        
         console.log('functionCall', functionCall);
         if (functionCall.name === 'eval_code_in_browser') {
             if (functionCall.arguments) {
@@ -97,16 +98,12 @@ export default function Chat() {
     const [mode, setMode] = useState<'home' | 'tools'>('home')
     const [apiKey, setApiKey] = useState<string | null>(null);
 
+    const [modelResponse, setModelResponse] = useState<any>(null);
     const { messages, input, handleInputChange, handleSubmit, append } = useChat({
         api: '/api/chat-with-functions-2',
         body: {
             apiKey,
         },
-        // onError: (error) => {
-        //     console.error('Chat error:', error);
-        //     alert(`Chat error: ${error.message}`);
-        //     window.localStorage.removeItem('OPENAI_API_KEY');
-        // },
         experimental_onFunctionCall: functionCallHandler,
     });
 
@@ -128,8 +125,28 @@ export default function Chat() {
         setMode('tools');
     };
 
-    const onSubmitFormComponent = (formValues: any) => {
+    const onSubmitFormComponent = async (formValues: any) => {
         console.log('onSubmitFormComponent', formValues);
+        console.log('Form submitted with values:', formValues);
+        const formEntries = Object.entries(formValues.formData).map(([key, value]) => `${key}: ${value}`);
+        const formDetails = formEntries.join(', ');
+    console.log(formDetails)
+        const newPrompt = `I am an insurance provider, these are the parameters of the user's building: ${formDetails}. Give me the risk analysis report for the building in a tabular form, and conclude the verdict. Make three columns: criteria, details, and remarks, keep the report precise and data oriented, give reasons for the verdict.`;
+    
+        const response = await fetch('/api/risktable', { // Assuming '/api/route' is your API endpoint in route.ts
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ newPrompt }),
+        });
+    
+        const data = await response.json();
+    console.log("hehhehhhh",data)
+        const messageContent = data.message?.content || "No response";
+    
+        setModelResponse(messageContent); 
+        // 
         const formResponse: Message = {
             id: nanoid(),
             name: 'create_simple_form',
@@ -242,20 +259,21 @@ function ShowMessage({ message: m, onSubmitFormComponent }: { message: Message, 
                         // resetKeys={[JSON.stringify(json)]}>
                         resetKeys={[JSON.stringify(m.function_call)]}>
                         <div>{isFunctionCallDone ? "" : "Writing..."}</div>
-                        <DynamicComponent functionCall={m.function_call} onSubmit={onSubmitFormComponent} />
+                        <DynamicComponent functionCall={m.function_call} onSubmit={onSubmitFormComponent} modelResponse={modelResponse}/>
                     </ErrorBoundary>
                 </>
                 )}
-            {/* {m.content || JSON.stringify(m.function_call)} */}
             <br />
             <br />
         </div>
     );
 }
 
-function DynamicComponent({ functionCall: functionCallRaw, onSubmit }: any) {
+function DynamicComponent({ functionCall: functionCallRaw, onSubmit ,modelResponse}: any) {
     const [kmlResponse, setKmlResponse] = useState(null);
+    
     const prevState = useRef<any>({});
+   
     if (!functionCallRaw) {
         return null;
     }
@@ -329,48 +347,27 @@ function DynamicComponent({ functionCall: functionCallRaw, onSubmit }: any) {
         console.log("sss",startPosition);
         console.log("mmm",markers)
         console.log("zzzz",zoomLevel)
-      
-
-        const callApi = async (startPosition) => {
-            try {
-                const response = await fetch('/api/riskanalysis', { // Adjust the API endpoint as necessary
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        circles: startPosition.map((pos) => ({
-                            center: pos.position,
-                            radius: 1000, // Set the radius as per your requirement
-                        })),
-                    }),
-                });
-    
-                if (response.ok) {
-                    const data = await response.json();
-                    setKmlResponse(data); // Update state with the received KML data
-                } else {
-                    // Handle errors
-                    console.error('Failed to fetch KML data');
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        };
-    
-        useEffect(() => {
-            if (prevState.current.startPosition) {
-                callApi(prevState.current.startPosition);
-            }
-        }, [prevState.current.startPosition]);
-        console.log("hehehh",kmlResponse)
-        return <div style={{ 'height': '100vh' }}>
-            <ErrorBoundary fallbackRender={fallbackRender} resetKeys={[JSON.stringify(startPosition), JSON.stringify(markers)]}>
-                {startPosition && (
-                    <Map center={startPosition} markers={markers} zoomLevel={zoomLevel} kmlFiles={kmlFileUrls} iconMapping={iconMapping} />
-                )}
-            </ErrorBoundary>
-        </div>;
+        console.log("ohhhh",modelResponse)
+        return (
+            <div>
+                <div style={{ 'height': '100vh' }}>
+                    <ErrorBoundary fallbackRender={fallbackRender} resetKeys={[JSON.stringify(startPosition), JSON.stringify(markers)]}>
+                        {startPosition && (
+                            <Map center={startPosition} markers={markers} zoomLevel={zoomLevel} kmlFiles={kmlFileUrls} iconMapping={iconMapping} />
+                        )}
+                    </ErrorBoundary>
+                </div>
+                <div>
+                    {modelResponse && (
+                        <div>
+                            <h3>Risk Analysis Report</h3>
+                            <pre>{JSON.stringify(modelResponse, null, 2)}</pre>
+                        </div>
+                    )}
+                </div>
+            </div> // This closing tag matches the opening <div> tag at the start
+        );
+        
     }
 
     if (JSON.stringify(functionCall).includes('create_simple_form')) {

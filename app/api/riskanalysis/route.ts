@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        const kmlFiles = ['/kml/flood.kml', 'waterdepth.kml'];
+        const kmlFiles = ['/kml/flood.kml', '/kml/waterdepth.kml'];
         const pointsInCircles: DataPoint[] = [];
 
         kmlFiles.forEach(kmlFile => {
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
                     const distance = calculateDistance({lat: point.lat, lon: point.lng}, {lat: circle.center[0], lon: circle.center[1]});
 
                     if (distance <= circle.radius) {
-                        pointsInCircles.push(point);
+                        pointsInCircles.push({...point, distance});
                     }
                 });
             });
