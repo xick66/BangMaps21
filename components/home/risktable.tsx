@@ -21,7 +21,6 @@ function RiskAnalysisTable({ modelResponse }: { modelResponse: string }) {
         return <div>Error parsing the response data. Check the console for more details.</div>;
     }
 
-    // Ensure responseObj is not null before proceeding
     if (!responseObj) {
         return <div>Invalid response data.</div>;
     }

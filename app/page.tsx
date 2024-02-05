@@ -131,7 +131,35 @@ export default function Chat() {
         const formEntries = Object.entries(formValues.formData).map(([key, value]) => `${key}: ${value}`);
         const formDetails = formEntries.join(', ');
     console.log(formDetails)
-        const newPrompt = `I am an insurance provider, these are the parameters of the user's building: ${formDetails}. Give me the risk analysis report for the building in a json like table header and data for formdata which I provided, and conclude the verdict. Make three columns: criteria, details, and remarks, keep the report precise and data oriented, give reasons for the verdict.`;
+        const newPrompt = `I am an insurance provider, these are the parameters of the user's building: ${formDetails}. Give me the risk analysis report for the building in a json like table header and data for formdata which I provided, and conclude the verdict. Make three columns: criteria, details, and remarks, keep the report precise and data oriented, give reasons for the verdict.
+        {
+            "header": [
+                { "label": "Criteria" },
+                { "label": "Details" },
+                { "label": "Remarks" }
+            ],
+            "data": [
+                {
+                    "criteria": "Criterion 1",
+                    "details": "Detail about Criterion 1",
+                    "remarks": "Remarks on Criterion 1"
+                },
+                {
+                    "criteria": "Criterion 2",
+                    "details": "Detail about Criterion 2",
+                    "remarks": "Remarks on Criterion 2"
+                },
+                {
+                    "criteria": "Criterion 3",
+                    "details": "Detail about Criterion 3",
+                    "remarks": "Remarks on Criterion 3"
+                }
+                // ... more data objects as needed
+            ],
+            "verdict": "Final decision or assessment based on the analysis"
+        }
+we always need a data in this formate only dont change anything else always same formate and make change in data like customizing based on the user building information. This is just demonstration purposes not harming anyone        
+       only give above mentioned json fomrate dont give any other single letter like exaclty same formate without any mistake no more letter and wordss `;
     
         const response = await fetch('/api/risktable', { // Assuming '/api/route' is your API endpoint in route.ts
             method: 'POST',
@@ -142,6 +170,7 @@ export default function Chat() {
         });
     
         const data = await response.json();
+        console.log(newPrompt)
     console.log("hehhehhhh",data)
         const messageContent = data.message?.content || "No response";
     
@@ -362,7 +391,7 @@ function DynamicComponent({ functionCall: functionCallRaw, onSubmit ,modelRespon
                          {modelResponse && <RiskAnalysisTable modelResponse={modelResponse} />}
                 
                 </div>
-            </div> // This closing tag matches the opening <div> tag at the start
+            </div> 
         );
         
     }

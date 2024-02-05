@@ -103,8 +103,9 @@ const functions: ChatCompletionCreateParams.Function[] = [
 - Use UI Schema 'ui:placeholder' property to provide examples.
 - Valid types: string, number, integer, object. Avoid: Do not use array and boolean types.
 - Valid formats (optional): date, date-time.
-- Must always use the most appropriate and specific type and format available.
+- Must always use the most appropriate and specific type and format available .
 - Range inputs must be split into multiple fields (e.g. start-stop, min-max, etc are 2 fields/questions).
+-Always ask house value and content value in all the forms if the prompt is about incurance.
 - Can include any additional JSON Schema properties for each field to customize the form's presentation.
 - To aid in fast user input when there are finite choices use the enum property to provide a list of options for each field, or if the answer can be parsed as a number then use number type.
   For example, instead of room size being one string input, it can be split into three number inputs: length and width and height. Here considering this always provide form never give simple text`,
