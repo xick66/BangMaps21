@@ -12,7 +12,7 @@ type PolicyDetails = {
 
 type SamplePolicies = Record<string, PolicyDetails>;
 
-const openaiApiKey = "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"; // Use environment variable for security
+const openaiApiKey = "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"; // Use environment variable for security
 const modelName = "gpt-3.5-turbo-0125"; // Adjust the model name as needed
 
 const samplePolicies: SamplePolicies = {
