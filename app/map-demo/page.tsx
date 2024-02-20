@@ -18,11 +18,11 @@ export default function Page() {
     const position: [number, number] = [51.505, -0.09]
     const markers: MapProps['markers'] = [{
         label: 'First location',
-        position: [51.505, -0.09],
+        position: [12.9716,  77.5946],
         color: 'red',
     }, {
         label: 'Second location',
-        position: [51.507, -0.07],
+        position: [12.9255, 77.5468],
         color: 'blue',
     }]
 

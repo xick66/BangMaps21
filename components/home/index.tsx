@@ -13,14 +13,13 @@ export default function Home({ runQuery }: HomeProps) {
   const [query, setQuery] = useState('');
   // const [apiKey, setApiKey] = useState('')
   const predefinedQueries = [
-    "Weather today",
-    "News updates",
-    "Local events",
-    "Traffic alerts",
+    "A house owner from defense colony, Indiranagar, Bangalore has requested for an insurance cover of 2Crore Rs for his 3 storied building, give me the risk analysis report for it and locate it on the map",
+    "A user from 5th cross, Malleshwaram,Bangalore wants  insurance for his 5 floor apartment, give me the risk analysis report for it and locate it on the map",
   ];
 
   const selectPredefinedQuery = (predefinedQuery: string) => {
     setQuery(predefinedQuery);
+    runQuery({ query: predefinedQuery, apiKey: getApiKey() });
 // submitForm();
   };
   const submitForm = () => {
@@ -39,7 +38,7 @@ export default function Home({ runQuery }: HomeProps) {
           <img alt="Logo" className="h-64 w-64" src="/BangMapsLogo.png" />
         </div>
       </div>
-      <div className="w-full max-w-md p-4 bg-white shadow-md rounded-md dark:bg-gray-800">
+      <div className="w-full max-w-2xl p-4 bg-white shadow-md rounded-md dark:bg-gray-800">
         <div className="flex flex-col items-center space-y-4">
           <div className="flex items-center space-x-2 w-full">
             <Input
@@ -65,8 +64,8 @@ export default function Home({ runQuery }: HomeProps) {
           </div>
         </div>
       </div>
-      <div className="w-full max-w-md p-4 mb-4 bg-white shadow-md rounded-md border-gray-200 dark:bg-inherit dark:border-gray-700">
-    <div className="mt-2 grid grid-cols-2 gap-4">
+      {/* <div className="w-full max-w-2xl p-4 mb-4 bg-white shadow-md rounded-md items-center border-gray-200 dark:bg-inherit dark:border-gray-700">
+    <div className="mt-2 grid grid-cols-2 gap-4 items-center">
         {predefinedQueries.map((predefinedQuery, index) => (
             <div key={index} className="col-span-1">
                 <button
@@ -78,8 +77,22 @@ export default function Home({ runQuery }: HomeProps) {
             </div>
         ))}
     </div>
+</div> */}
+<div className="w-full max-w-2xl p-4 mb-4 bg-white shadow-md rounded-md items-center border-gray-200 dark:bg-inherit dark:border-gray-700">
+  <div className="mt-2 grid grid-cols-2 gap-4 items-center">
+    {predefinedQueries.map((predefinedQuery, index) => (
+      <div key={index} className="col-span-1 flex h-full">
+        <button
+          className="w-full h-full text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded border border-gray-300 dark:border-gray-600"
+          onClick={() => selectPredefinedQuery(predefinedQuery)}
+          style={{ minHeight: '100%' }} // Ensure buttons take full height of parent
+        >
+          {predefinedQuery}
+        </button>
+      </div>
+    ))}
+  </div>
 </div>
-
     </section>
   )
 }

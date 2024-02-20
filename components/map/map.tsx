@@ -3,14 +3,14 @@
 import 'leaflet/dist/leaflet.css';
 
 import L, { Icon } from 'leaflet';
-import { MapContainer, Marker, Popup, TileLayer,useMap,Circle ,CircleMarker } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer,useMap,Circle ,CircleMarker,Polyline } from 'react-leaflet';
 import omnivore from "@mapbox/leaflet-omnivore";
 import markerBlue from '../../public/pin-blue.svg';
 import markerRed from '../../public/pin-red.svg';
 import React,{useState,useRef,useEffect} from 'react';
 import { Circle as LeafletCircle } from 'react-leaflet';
 import { PathOptions } from 'leaflet';
-
+const circleRadius = 1000;
 interface ExtendedCircleProps {
   center: [number, number];
   pathOptions?: PathOptions;
@@ -25,6 +25,111 @@ interface DataPoint {
 const ExtendedCircle: React.FC<ExtendedCircleProps> = (props) => {
   return <LeafletCircle {...props} />;
 };
+
+// const ExtendedCircle: React.FC<ExtendedCircleProps> = ({ center, pathOptions, radius }) => {
+//     const [currentRadius, setCurrentRadius] = useState<number>(0);
+//     const maxRadius = radius; // The maximum radius your circle should achieve while scanning
+  
+//     useEffect(() => {
+//       const interval = setInterval(() => {
+//         setCurrentRadius((prevRadius) => {
+//           if (prevRadius >= maxRadius) {
+//             return 0; // Reset the radius to create a continuous scanning effect
+//           }
+//           return prevRadius + 10; // Increment the radius. Adjust the value for speed.
+//         });
+//       }, 100); // Adjust the interval for speed. Smaller values make the animation faster.
+  
+//       return () => clearInterval(interval);
+//     }, [maxRadius]);
+  
+//     return (
+//       <LeafletCircle
+//         center={center}
+//         pathOptions={pathOptions}
+//         {...{radius:currentRadius }}
+//       />
+//     );
+//   };
+
+
+// const ExtendedCircle: React.FC<ExtendedCircleProps> = ({ center, radius, pathOptions }) => {
+//     const map = useMap();
+//     const scanningLineRef = useRef<L.Polyline | null>(null);
+  
+//     useEffect(() => {
+//       if (!map || !scanningLineRef.current) return;
+  
+//       let angle = 0;
+//       const updateLine = () => {
+//         if (!scanningLineRef.current) return;
+  
+//         const endPoint = calculateEndPoint(center, radius, angle);
+//         scanningLineRef.current.setLatLngs([center, endPoint]);
+//         angle = (angle + 10) % 360; // Increment angle for rotation, reset every 360 degrees
+//       };
+  
+//       const intervalId = setInterval(updateLine, 100); // Update line position every 100 ms
+  
+//       return () => clearInterval(intervalId);
+//     }, [map, center, radius]);
+  
+//     return (
+//       <>
+//         <ExtendedCircle center={center} {...{radius:radius} } pathOptions={pathOptions} />
+//         <L.Polyline ref={scanningLineRef} positions={[center, center]} color="green" />
+//       </>
+//     );
+//   };
+  
+//   function calculateEndPoint(center, radius, angle) {
+//     const angleRad = (angle * Math.PI) / 180;
+//     const dx = radius * Math.cos(angleRad);
+//     const dy = radius * Math.sin(angleRad);
+//     const latLng = L.latLng(center[0], center[1]);
+//     const map = L.map("map"); // Replace "map" with the ID of your map container
+//     const endPoint = map.unproject(map.project(latLng).add([dx, -dy]));
+//     return [endPoint.lat, endPoint.lng];
+//   }
+  
+// const ExtendedCircle: React.FC<ExtendedCircleProps> = ({ center, radius, pathOptions }) => {
+//     const map = useMap();
+//     const scanningLineRef = useRef<L.Polyline | null>(null);
+  
+//     useEffect(() => {
+//       if (!map || !scanningLineRef.current) return;
+  
+//       let angle = 0;
+//       const updateLine = () => {
+//         if (!scanningLineRef.current) return;
+  
+//         const endPoint = calculateEndPoint(map, center, radius, angle); // Pass the map instance here
+//         scanningLineRef.current.setLatLngs([center, endPoint]);
+//         angle = (angle + 10) % 360; // Increment angle for rotation, reset every 360 degrees
+//       };
+  
+//       const intervalId = setInterval(updateLine, 100); // Update line position every 100 ms
+  
+//       return () => clearInterval(intervalId);
+//     }, [map, center, radius]);
+  
+//     return (
+//       <>
+//         <ExtendedCircle center={center} radius={radius} pathOptions={pathOptions} />
+//         <L.Polyline ref={scanningLineRef} positions={[center, center]} color="green" />
+//       </>
+//     );
+// };
+
+// function calculateEndPoint(map, center, radius, angle) {
+//     const angleRad = (angle * Math.PI) / 180;
+//     const dx = radius * Math.cos(angleRad);
+//     const dy = radius * Math.sin(angleRad);
+//     const latLng = L.latLng(center[0], center[1]);
+//     const endPoint = map.unproject(map.project(latLng).add([dx, -dy]));
+//     return [endPoint.lat, endPoint.lng];
+// }
+
 const markersByColor = {
     'red': new Icon({iconUrl: markerRed.src, iconSize: [24, 32]}),
     'blue': new Icon({iconUrl: markerBlue.src, iconSize: [24, 32]})
@@ -87,7 +192,7 @@ const mapRef=useRef()
 const [circleData, setCircleData] = useState([]); 
     const [kmlData, setKmlData] = useState([]);
     const [userMarkers, setUserMarkers] = useState<Marker[]>([]);
-const circleRadius = 1000;
+
 const handleMapClick = (e: L.LeafletMouseEvent) => {
     const newMarker: Marker = {
       position: [e.latlng.lat, e.latlng.lng],
@@ -145,7 +250,7 @@ useEffect(() => {
                             <ExtendedCircle
   center={data.position}
   pathOptions={{ color: 'red' }}
-  radius={circleRadius}
+  radius={circleRadius as any}
 />
                         </div>
                     );
