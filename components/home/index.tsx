@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRef, useState } from 'react';
+import { useRef, useState,useEffect } from 'react';
 
 export interface HomeProps {
   runQuery: (data: { query: string; apiKey: string }) => void;
@@ -12,7 +12,17 @@ export default function Home({ runQuery }: HomeProps) {
 
   const [query, setQuery] = useState('');
   // const [apiKey, setApiKey] = useState('')
+  const predefinedQueries = [
+    "Weather today",
+    "News updates",
+    "Local events",
+    "Traffic alerts",
+  ];
 
+  const selectPredefinedQuery = (predefinedQuery: string) => {
+    setQuery(predefinedQuery);
+// submitForm();
+  };
   const submitForm = () => {
     const apiKey = getApiKey();
     // if (!query || !apiKey) return false;
@@ -24,7 +34,11 @@ export default function Home({ runQuery }: HomeProps) {
 
   return (
     <section className="home flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900">
-      <img alt="Logo" className="h-64 w-64 mb-4" src="/BangMapsLogo.png" />
+       <div className="relative w-full h-1/2 bg-cover bg-center" style={{ backgroundImage: "url('/landingpage.png')",top:0 }}>
+        <div className="flex items-center justify-center h-full">
+          <img alt="Logo" className="h-64 w-64" src="/BangMapsLogo.png" />
+        </div>
+      </div>
       <div className="w-full max-w-md p-4 bg-white shadow-md rounded-md dark:bg-gray-800">
         <div className="flex flex-col items-center space-y-4">
           <div className="flex items-center space-x-2 w-full">
@@ -51,6 +65,21 @@ export default function Home({ runQuery }: HomeProps) {
           </div>
         </div>
       </div>
+      <div className="w-full max-w-md p-4 mb-4 bg-white shadow-md rounded-md border-gray-200 dark:bg-inherit dark:border-gray-700">
+    <div className="mt-2 grid grid-cols-2 gap-4">
+        {predefinedQueries.map((predefinedQuery, index) => (
+            <div key={index} className="col-span-1">
+                <button
+                    className="w-full text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 py-2 px-4 rounded border border-gray-300 dark:border-gray-600"
+                    onClick={() => selectPredefinedQuery(predefinedQuery)}
+                >
+                    {predefinedQuery}
+                </button>
+            </div>
+        ))}
+    </div>
+</div>
+
     </section>
   )
 }
