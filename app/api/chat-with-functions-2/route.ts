@@ -85,7 +85,7 @@ const functions: ChatCompletionCreateParams.Function[] = [
   // Form v3
     {
         name: 'create_simple_form',
-        description: 'Use this function to convert user-provided information into a structured form alaways provide form. It dynamically generates a form based on the provided JSON schema, tailored to capture specific details as requested by the user. The function ensures that the form is interactive and user-friendly, making it ideal for collecting and organizing user inputs efficiently and shoudld only valid data. In this Never a normal text always produce a form whatever user convert that into form',
+        description: 'Use this function to convert user-provided information into a structured form, based on the provided information always generate the form related to the information. It dynamically generates a form based on the provided JSON schema, tailored to capture specific details as requested by the user. The function ensures that the form is interactive and user-friendly, making it ideal for collecting and organizing user inputs efficiently and shoudld only valid data. In this Never a normal text always produce a form whatever user convert that into form',
         parameters: {
            type: 'object',
             properties: {
@@ -135,7 +135,7 @@ const functions: ChatCompletionCreateParams.Function[] = [
     // Enhanced Map Component
     {
         name: 'create_dynamic_map',
-        description: 'This function dynamically generates an interactive map based on user inputs. It is designed to visually represent geographic data or locations as specified by the user. The map can be customized with various markers, zoom levels, and center points, making it ideal for applications in travel planning, event location scouting, or geographical data visualization.',
+        description: 'This function dynamically generates an interactive map based on user inputs. It is designed to visually represent geographic data or locations as specified by the user. The map can be customized with various markers, zoom levels, and center points, making it ideal for applications in travel planning, event location scouting, or geographical data visualization mainly focused for searching the home, bungalows.',
         parameters: {
             type: 'object',
             properties: {
@@ -221,25 +221,71 @@ const functions: ChatCompletionCreateParams.Function[] = [
 
 
   // 3D generation
-  /*
+  
+    // {
+    //     name: 'upsert_3d_scene',
+    //     description: 'Generate 3D scene to visually represent the scene described in the form',
+    //     parameters: {
+    //         type: 'object',
+    //         properties: {
+    //             id: {
+    //                 type: 'string',
+    //                 description: `Form identifier. To add a new form create a new unique auto-incrementing ID. To edit an existing form use an existing ID here.`,
+    //             },
+    //             descriptionOfScene: {
+    //                 type: 'string',
+    //                 description: 'Exhaustive detailed description of the scene which will be given to an expert 3D software developer'
+    //             },
+    //         }
+    //     },
+    // },
     {
-        name: 'upsert_3d_scene',
-        description: 'Generate 3D scene to visually represent the scene described in the form',
+        name: "create_or_modify_3d_scene",
+        description: "This function dynamically generates or modifies a 3D scene based on user inputs. It is designed to visually represent a 3D environment or object as specified by the user. The scene can be customized with various objects, textures, lighting, and viewpoints, making it ideal for applications in 3D modeling, virtual environment creation, or product visualization.",
         parameters: {
-            type: 'object',
+            type: "object",
             properties: {
                 id: {
-                    type: 'string',
-                    description: `Form identifier. To add a new form create a new unique auto-incrementing ID. To edit an existing form use an existing ID here.`,
+                    type: "string",
+                    description: "Unique identifier for the 3D scene. Use a new ID for creating a new scene or an existing ID to modify an existing scene."
                 },
-                descriptionOfScene: {
-                    type: 'string',
-                    description: 'Exhaustive detailed description of the scene which will be given to an expert 3D software developer'
+                sceneElements: {
+                    type: "array",
+                    description: "A collection of elements to be included or modified in the 3D scene. Each element represents a specific object or feature within the scene.",
+                    items: {
+                        type: "object",
+                        properties: {
+                            elementType: {
+                                type: "string",
+                                description: "The type of element to be added or modified, such as 'box', 'sphere', 'light', or 'camera'."
+                            },
+                            properties: {
+                                type: "object",
+                                description: "The properties for the element, such as dimensions, position, color, intensity, or any other relevant attributes."
+                            }
+                        },
+                        required: ["elementType", "properties"]
+                    }
                 },
-            }
-        },
-    },
-    */
+                sceneSettings: {
+                    type: "object",
+                    description: "Global settings for the 3D scene, such as background color, ambient lighting, or camera position.",
+                    properties: {
+                        backgroundColor: {
+                            type: "string",
+                            description: "The background color of the scene, specified as a hex code."
+                        },
+                        ambientLight: {
+                            type: "object",
+                            description: "Settings for the scene's ambient light, including color and intensity."
+                        }
+                    }
+                }
+            },
+            required: ["id", "sceneElements"]
+        }
+    }
+    
     // Checklist
     /*
     {
@@ -303,15 +349,14 @@ export async function POST(req: Request) {
 You are an intelligent assistant specializing in understanding user needs and intentions for the purpose of dynamically constructing a context-dependent UI using available components.
 
 When you receive a user's input, your first task is to decipher the user's intention. Consider the context, the specifics of the request, and any underlying needs or goals. If the request is ambiguous or lacks detail, ask targeted follow-up questions to gather the necessary information. Your aim is to develop a clear and comprehensive understanding of what the user wants to achieve, such that you can invoke the following tools to display to the user:
-
 Available tools:
-- Interactive Map: Essential for travel planning, event locations, and potentially home automation control.
+- Interactive Map: Essential for travel planning, event locations,buying home, bungalows  and potentially home automation control.
 - 3D Rendering Engine: For interior design, home automation visualization, and potentially for event space planning.
 - Customizable Forms/Input Components: To present to a user to ask them follow up questions that clarify their intent.
 
 Instructions: 
 - If you need further context from the user to understand their intention sufficient enough to generate a good UI, respond with 3-5 follow-up questions or statements to clarify the user's intention. Focus on understanding the specific requirements, preferences, or constraints related to their request.
-- If you have only 1 quick follow-up question then use chat, otherwise must always use the 'create_simple_form' function.
+- If you have only 1 quick follow-up question then use chat, otherwise must always use the 'create_simple_form' function but most of them time even its is just 1 quick follow-up question use the create_simple_form.
 `
                 //                 content: `
                 // Now you are an advanced interface designer, capable of creating structured UI schemas based on the available user requirements.

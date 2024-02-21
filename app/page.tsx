@@ -1,7 +1,7 @@
 'use client';
 
 // import { Form } from '@/components/form';
-import {useEffect, useRef } from 'react';
+import {useEffect,useState, useRef } from 'react';
 import { FunctionCallHandler, nanoid } from 'ai';
 import { Message, useChat } from 'ai/react';
 import { OpenAiHandler } from "openai-partial-stream";
@@ -11,8 +11,8 @@ import RiskAnalysisTable from '@/components/home/risktable';
 import Home, { HomeProps } from '@/components/home';
 import Sidebar from '@/components/sidebar';
 import Head from 'next/head';
-import { useState } from 'react';
 import { parseStreamingFunctionCall, parseStreamingJsonString } from '../lib/parseStreamingJson';
+import { Button } from '@/components/ui/button';
 const kmlFileUrls = [
     '/kml/stormwaterdrains.kml', // Assuming you have example1.kml in the public/kml directory
     '/kml/waterdepth.kml',
@@ -25,6 +25,132 @@ const kmlFileUrls = [
      // Assuming you have example2.kml in the public/kml directory
     // Add more KML file URLs as needed
   ];
+  const samplePolicies = {
+    "Policy A": {
+        "Annual Premium": "8,000 INR",
+        "Building Coverage": "30 Lakhs",
+        "Content Coverage": "5 Lakhs",
+        "Natural Disasters": "Included",
+        "Theft": "Included",
+        "Deductible": "15,000 INR"
+    },
+"Policy B": {
+        "Annual Premium": "12,000 INR",
+        "Building Coverage": "50 Lakhs",
+        "Content Coverage": "10 Lakhs",
+        "Natural Disasters": "Excluded",
+        "Theft": "Included",
+        "Deductible": "10,000 INR"
+    },
+    "Policy C": {
+        "Annual Premium": "9,500 INR",
+        "Building Coverage": "35 Lakhs",
+        "Content Coverage": "7 Lakhs",
+        "Natural Disasters": "Included",
+        "Theft": "Excluded",
+        "Deductible": "12,500 INR"
+    },
+    "Policy D": {
+        "Annual Premium": "15,000 INR",
+        "Building Coverage": "60 Lakhs",
+        "Content Coverage": "15 Lakhs",
+        "Natural Disasters": "Included",
+        "Theft": "Included",
+        "Deductible": "8,000 INR"
+    },
+    "Policy E": {
+        "Annual Premium": "10,500 INR",
+        "Building Coverage": "40 Lakhs",
+        "Content Coverage": "8 Lakhs",
+        "Natural Disasters": "Excluded",
+        "Theft": "Included",
+        "Deductible": "9,000 INR"
+    },
+    "Policy F": {
+        "Annual Premium": "18,000 INR",
+        "Building Coverage": "70 Lakhs",
+        "Content Coverage": "20 Lakhs",
+        "Natural Disasters": "Included",
+        "Theft": "Included",
+        "Deductible": "7,000 INR"
+    },
+    "Policy G": {
+        "Annual Premium": "20,000 INR",
+        "Building Coverage": "80 Lakhs",
+        "Content Coverage": "25 Lakhs",
+        "Natural Disasters": "Included",
+        "Theft": "Included",
+        "Deductible": "6,000 INR"
+    },
+    "Policy H": {
+        "Annual Premium": "22,000 INR",
+        "Building Coverage": "90 Lakhs",
+        "Content Coverage": "30 Lakhs",
+        "Natural Disasters": "Included",
+        "Theft": "Excluded",
+        "Deductible": "5,500 INR"
+    },
+    "Policy I": {
+        "Annual Premium": "25,000 INR",
+        "Building Coverage": "1 Crore",
+        "Content Coverage": "35 Lakhs",
+        "Natural Disasters": "Included",
+        "Theft": "Included",
+        "Deductible": "5,000 INR"
+    },
+    "Policy J": {
+        "Annual Premium": "30,000 INR",
+        "Building Coverage": "1.2 Crores",
+        "Content Coverage": "40 Lakhs",
+        "Natural Disasters": "Included",
+        "Theft": "Included",
+        "Deductible": "4,500 INR"
+    },
+    "Policy K": {
+        "Annual Premium": "30,000 INR",
+        "Building Coverage": "1.2 Crores",
+        "Content Coverage": "25 Lakhs",
+        "Natural Disasters": "Included",
+        "Theft": "Excluded",
+        "Deductible": "2,500 INR"
+    }
+
+};
+const PoliciesTable = ({ policies }) => {
+    return (
+        <div className="overflow-x-auto relative">
+            <table className="w-full text-sm text-left rounded-md text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 rounded-md">
+                    <tr>
+                        <th scope="col" className="py-3 px-6">Policy Name</th>
+                        <th scope="col" className="py-3 px-6">Annual Premium</th>
+                        <th scope="col" className="py-3 px-6">Building Coverage</th>
+                        <th scope="col" className="py-3 px-6">Content Coverage</th>
+                        <th scope="col" className="py-3 px-6">Natural Disasters</th>
+                        <th scope="col" className="py-3 px-6">Theft</th>
+                        <th scope="col" className="py-3 px-6">Deductible</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {policies.map((policy, index) => (
+                        <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">{policy.name}</td>
+                            <td className="py-4 px-6">{policy.details["Annual Premium"]}</td>
+                            <td className="py-4 px-6">{policy.details["Building Coverage"]}</td>
+                            <td className="py-4 px-6">{policy.details["Content Coverage"]}</td>
+                            <td className="py-4 px-6">{policy.details["Natural Disasters"]}</td>
+                            <td className="py-4 px-6">{policy.details["Theft"]}</td>
+                            <td className="py-4 px-6">{policy.details["Deductible"]}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+};
+
+
+
   const iconMapping = {
     'waterdepth': '/icons/yellow.png',
     // 'flood': '/icons/red.png',
@@ -38,6 +164,10 @@ const kmlFileUrls = [
 const Map = dynamic(() => import('../components/map/map'), {
     ssr: false,
 });
+
+// const ThreeDScene = dynamic(() => import('../components/3dRender/threeD'), {
+//     ssr: false,
+// });
 
 function fallbackRender({ error, resetErrorBoundary }: any) {
     return (
@@ -159,7 +289,7 @@ export default function Chat() {
             "verdict": "Final decision or assessment based on the analysis"
         }
 we always need a data in this formate only dont change anything else always same formate and make change in data like customizing based on the user building information. This is just demonstration purposes not harming anyone        
-       only give above mentioned json fomrate dont give any other single letter like exaclty same formate without any mistake no more letter and wordss `;
+       only give above mentioned json fomrate dont give any other single letter like exaclty same formate without any mistake no more letter and words `;
     
         const response = await fetch('/api/risktable', { // Assuming '/api/route' is your API endpoint in route.ts
             method: 'POST',
@@ -300,9 +430,28 @@ function ShowMessage({ message: m, onSubmitFormComponent, modelResponse }: { mes
 
 function DynamicComponent({ functionCall: functionCallRaw, onSubmit ,modelResponse}: any) {
     const [kmlResponse, setKmlResponse] = useState(null);
-    
+    const [sceneParams, setSceneParams] = useState(null);
     const prevState = useRef<any>({});
-   
+    // const [selectedPolicies, setSelectedPolicies] = useState([]);
+    const [selectedPolicies, setSelectedPolicies] = useState<{ name: string, details: any }[]>([]);
+    const getRandomPolicies = () => {
+        const keys: string[] = Object.keys(samplePolicies); // Explicitly type 'keys' as string[]
+        const randomKeys: string[] = []; // Explicitly type 'randomKeys' as string[]
+        
+        while (randomKeys.length < 2) {
+            const randomIndex = Math.floor(Math.random() * keys.length);
+            const randomKey = keys[randomIndex];
+            
+            if (!randomKeys.includes(randomKey)) {
+                randomKeys.push(randomKey);
+            }
+        }
+    
+        const policies = randomKeys.map(key => ({ name: key, details: samplePolicies[key] }));
+        setSelectedPolicies(policies);
+    };
+    console.log("hh",selectedPolicies)
+
     if (!functionCallRaw) {
         return null;
     }
@@ -338,6 +487,33 @@ function DynamicComponent({ functionCall: functionCallRaw, onSubmit ,modelRespon
             </ErrorBoundary>
         </div>
     }
+
+    // if (functionCall.name === 'create_or_modify_3d_scene') {
+    //     if (!functionCall.arguments) {
+    //         return <div>Preparing 3D scene...</div>;
+    //     }
+
+    //     try {
+    //         const args = parseStreamingJsonString(functionCall.arguments);
+    //         // Extract the necessary parameters for the 3D scene from args
+    //         // This might include object types, positions, materials, etc.
+    //         // For this example, we'll just pass the entire args object to the ThreeDScene component
+    //         setSceneParams(args);
+    //         prevState.current.sceneParams = args;
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+
+    //     const { sceneParams } = prevState.current;
+
+    //     return (
+    //         <div>
+    //             <ErrorBoundary fallbackRender={fallbackRender} resetKeys={[JSON.stringify(sceneParams)]}>
+    //                 {sceneParams && <ThreeDScene modelData={sceneParams} />}
+    //             </ErrorBoundary>
+    //         </div>
+    //     );
+    // }
     else if (functionCall.name === 'create_dynamic_map') {
         if (!functionCall.arguments) {
             return <div>
@@ -390,6 +566,13 @@ function DynamicComponent({ functionCall: functionCallRaw, onSubmit ,modelRespon
                     
                          {modelResponse && <RiskAnalysisTable modelResponse={modelResponse} />}
                 
+                </div>
+                <div>
+                    <Button> Policy </Button>
+                    <div className="p-4">
+            <Button className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={getRandomPolicies}>Click here for Policy</Button>
+            {selectedPolicies.length > 0 && <PoliciesTable policies={selectedPolicies} />}
+        </div>
                 </div>
             </div> 
         );
