@@ -568,7 +568,6 @@ function DynamicComponent({ functionCall: functionCallRaw, onSubmit ,modelRespon
                 
                 </div>
                 <div>
-                    <Button> Policy </Button>
                     <div className="p-4">
             <Button className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={getRandomPolicies}>Click here for Policy</Button>
             {selectedPolicies.length > 0 && <PoliciesTable policies={selectedPolicies} />}
